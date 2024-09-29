@@ -10,14 +10,12 @@ def get_big_mac_price_by_year(year,country_code):
 
     return mean_by_year
 
-
 def get_big_mac_price_by_country(country_code):
     df = pd.read_csv(big_mac_file)
     country_price_df = df[(df['iso_a3'] == country_code.upper())]
     mean_by_country = round(float(country_price_df['dollar_price'].mean()), 2)
 
     return mean_by_country
-
 
 def get_the_cheapest_big_mac_price_by_year(year):
     df = pd.read_csv(big_mac_file)
@@ -28,10 +26,14 @@ def get_the_cheapest_big_mac_price_by_year(year):
 
     return cheapest
 
-
-
 def get_the_most_expensive_big_mac_price_by_year(year):
-    pass # Max
+    df = pd.read_csv(big_mac_file)
+    max_df = df[(df['date'].str[:4] == str(year))]
+    max_value_index = max_df['dollar_price'].idxmax()
+    max_row = df.loc[max_value_index]
+    expensive = f"{max_row['name']}({max_row['iso_a3']}): ${round(max_row['dollar_price'], 2)}"
+
+    return expensive
 
 if __name__ == "__main__":
     mean_by_year = get_big_mac_price_by_year(2010,'arg')
@@ -43,5 +45,6 @@ if __name__ == "__main__":
     min_value = get_the_cheapest_big_mac_price_by_year(2008)
     print(min_value)
 
-    name = get_the_cheapest_big_mac_price_by_year
-    print(name)
+    max_value = get_the_most_expensive_big_mac_price_by_year(2014)
+    print(max_value)
+
